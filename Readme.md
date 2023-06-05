@@ -1,4 +1,4 @@
-Tested Contract: https://testnet.bscscan.com/token/0x71f31245604d78e637dc7f5f611b06121669a2d3
+Tested Contract: (https://testnet.bscscan.com/address/0x6e626d64d0346011b6f9ed89797fe99f596cd332)
 
 Here's a summary of the functions and features of the provided contract:
 
