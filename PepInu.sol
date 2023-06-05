@@ -15,14 +15,14 @@ contract PepeInu is ERC20, Ownable {
     bool private swapping;
 
     address payable public devWallet;
-    uint256 public taxRate = 5; // 5% tax rate
-    uint256 public burnRate = 0; // 0% burn rate
+    uint256 public taxFee = 5; // 5% tax rate
+    uint256 public burnFee = 0; // 0% burn rate
     uint256 public swapTokensAtAmount = 100000 * 10 ** decimals(); // Minimum tokens required for swap
     uint256 public maxTransfer = 100000000 * 10 ** decimals(); // Maximum transfer limit
 
     mapping(address => bool) private _isExcludedFromFees;
 
-    event SwapAndLiquify(uint256 tokensSwapped, uint256 ethReceived, uint256 tokensIntoLiqudity);
+    event SwapAndLiquify(uint256 tokensSwapped, uint256 ethReceived, uint256 tokensIntoLiquidity);
     event ExcludeFromFees(address indexed account, bool isExcluded);
     event ExcludeMultipleAccountsFromFees(address[] accounts, bool isExcluded);
 
@@ -105,8 +105,8 @@ contract PepeInu is ERC20, Ownable {
 
     if (takeFee) {
         require(amount <= maxTransfer, "Transfer amount exceeds the maximum limit"); 
-        uint256 taxAmount = amount.mul(taxRate).div(100);
-        uint256 burnAmount = amount.mul(burnRate).div(100);
+        uint256 taxAmount = amount.mul(taxFee).div(1000);
+        uint256 burnAmount = amount.mul(burnFee).div(1000);
         uint256 transferAmount = amount.sub(taxAmount).sub(burnAmount);
 
         super._transfer(from, address(this), taxAmount);
@@ -117,16 +117,12 @@ contract PepeInu is ERC20, Ownable {
     }
 }
 
-function burn(uint256 amount) public {
-    _burn(msg.sender, amount);
+function setTaxFee(uint256 _taxFee) public onlyOwner {
+    taxFee = _taxFee;
 }
 
-function setTaxRate(uint256 _taxRate) public onlyOwner {
-    taxRate = _taxRate;
-}
-
-function setBurnRate(uint256 _burnRate) public onlyOwner {
-    burnRate = _burnRate;
+function setBurnFee(uint256 _burnFee) public onlyOwner {
+    burnFee = _burnFee;
 }
 
 function setMaxTransfer(uint256 _maxTransfer) public onlyOwner {
